@@ -37,7 +37,9 @@ static DAC5571_RET_CODE_T __dac5571_verify_device(const dac5571_dev_t * const de
         return DAC5571_RET_CODE_ERROR_INVALID_PARAM;
 
     //! Verify I2C address
-    if (dev->i2c_addr != DAC5571_ADDR_BROADCAST && dev->i2c_addr != DAC5571_ADDR_SINGLECAST)
+    if (dev->i2c_addr != DAC5571_ADDR_BROADCAST
+        && dev->i2c_addr != DAC5571_ADDR_SINGLECAST_A0_GND
+        && dev->i2c_addr != DAC5571_ADDR_SINGLECAST_A0_VDD)
         return DAC5571_RET_CODE_ERROR_INVALID_PARAM;
 
     //! Verify reference voltage
@@ -116,10 +118,8 @@ DAC5571_RET_CODE_T dac5571_force_mode(const dac5571_dev_t * const dev, DAC5571_M
     data[1] = 0;
 
     ret_code = dev_ptr->i2c_write(dev_ptr->i2c_addr, data, DAC5571_REG_BYTE_COUNT);
-    if (ret_code) {
-        ret_code = DAC5571_RET_CODE_ERROR_COMMUNICATION;
+    if (ret_code != DAC5571_RET_CODE_SUCCESS)
         goto __ret;
-    }
 
 __ret:
     return ret_code;
@@ -162,10 +162,8 @@ DAC5571_RET_CODE_T dac5571_force_data(const dac5571_dev_t * const dev, unsigned 
     data[0] = (data[0] >> DAC5571_REG_DATA_HALF_BYTE_OFFSET) | (DAC5571_MODE_NORMAL << DAC5571_REG_MODE_OFFSET);
 
     ret_code = dev_ptr->i2c_write(dev_ptr->i2c_addr, data, DAC5571_REG_BYTE_COUNT);
-    if (ret_code) {
-        ret_code = DAC5571_RET_CODE_ERROR_COMMUNICATION;
+    if (ret_code != DAC5571_RET_CODE_SUCCESS)
         goto __ret;
-    }
 
 __ret:
     return ret_code;

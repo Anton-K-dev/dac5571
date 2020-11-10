@@ -24,8 +24,9 @@ typedef enum {
  *  via I2C interface to synchronous several chips on the single line.
  */
 typedef enum {
-    DAC5571_ADDR_BROADCAST = 0xA8,
-    DAC5571_ADDR_SINGLECAST = 0xAA
+    DAC5571_ADDR_BROADCAST = 0x48,
+    DAC5571_ADDR_SINGLECAST_A0_GND = 0x4C,
+    DAC5571_ADDR_SINGLECAST_A0_VDD = 0x4D,
 } DAC5571_ADDR_T;
 
 /**@brief Reference voltage
@@ -52,9 +53,10 @@ typedef enum {
  * @param[IN] data - data buffer pointer
  * @param[IN] len - data buffer length
  *
- * @return result code of communication, success should be as 0 code
+ * @return result code of communication.
+ *  Success should be as DAC5571_RET_CODE_SUCCESS, otherwise DAC5571_RET_CODE_ERROR_COMMUNICATION
  */
-typedef int (* dac5571_i2c_com_fptr_t)(unsigned char addr, unsigned char *data, unsigned short len);
+typedef DAC5571_RET_CODE_T (* dac5571_i2c_com_fptr_t)(unsigned char addr, unsigned char *data, unsigned short len);
 
 /**@brief Device driver configuration structure type
  */
